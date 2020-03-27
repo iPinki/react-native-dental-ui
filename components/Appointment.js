@@ -1,60 +1,66 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import styled from 'styled-components/native';
+import React from "react";
+import { View } from "react-native";
+import styled from "styled-components/native";
 
-const Group = ({user, diagnosis, active, time}) => {
-    return(
-        <GroupItem>
-          <Avatar source={{uri: user.avatar}}/>
-          <View style={{flex: 1}}>
-            <FullName>{user.fullname}</FullName>
-            <GrayText>{diagnosis}</GrayText>
-          </View>
-          <GroupDate active={active}>{time}</GroupDate>
-        </GroupItem>
-    );
-}
+import GrayText from "./GrayText";
+import Badge from "./Badge";
 
-Group.defaultProps = {
-    title: 'Untitled',
-    items: [],
+import getAvatarColor from "../utils/getAvatarColor";
+
+const Appointment = ({ navigate, item }) => {
+  const { patient, diagnosis, active, time } = item;
+  const avatarColors = getAvatarColor(patient.fullname[0].toUpperCase());
+  return (
+    <GroupItem onPress={navigate.bind(this, "Patient", item)}>
+      <Avatar
+        style={{
+          backgroundColor: avatarColors.background
+        }}
+      >
+        <Letter style={{ color: avatarColors.color }}>
+          {patient.fullname[0].toUpperCase()}
+        </Letter>
+      </Avatar>
+      <View style={{ flex: 1 }}>
+        <FullName>{patient.fullname}</FullName>
+        <GrayText>{diagnosis}</GrayText>
+      </View>
+      {time && <Badge active={active}>{time}</Badge>}
+    </GroupItem>
+  );
 };
 
-const GroupDate = styled.Text`
-  background: ${props => (props.active ? '#2a86ff' : ' #e9f5ff')};
-  color: ${props => (props.active ? '#fff' : '#4294ff')};
-  border-radius: 18px;
-  font-weight: bold;
-  font-size: 14px;
-  width: 70px;
-  height: 32px;
-  text-align: center;
-  line-height: 32px;
-`;
+Appointment.defaultProps = {
+  groupTitle: "Untitled",
+  items: []
+};
 
-const GrayText = styled.Text`
-  font-size: 16px;
-  color: #8b979f;
+const Letter = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -1px;
 `;
 
 const FullName = styled.Text`
-  font-weight: bold;
+  font-weight: 600;
   font-size: 16px;
 `;
 
-const Avatar = styled.Image`
+const Avatar = styled.View`
+  align-items: center;
+  justify-content: center;
   border-radius: 50px;
   width: 40px;
   height: 40px;
-  margin-right: 16px;
+  margin-right: 15px;
 `;
 
 const GroupItem = styled.TouchableOpacity`
-  flex-direction: row;
   align-items: center;
+  flex-direction: row;
   padding: 20px;
   border-bottom-width: 1px;
   border-bottom-color: #f3f3f3;
 `;
 
-export default Group;
+export default Appointment;

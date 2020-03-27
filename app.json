@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Blank Template",
-    "slug": "dental",
+    "slug": "react-native-dental-app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
